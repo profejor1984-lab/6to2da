@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calculadora Windows 10</title>
+<style>
+    body {
+        background: #1e1e1e;
+        margin: 0;
+        padding: 40px;
+        font-family: "Segoe UI", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .window {
+        width: 300px;
+        background: #f3f3f3;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* Barra de título estilo Windows 10 */
+    .titlebar {
+        display: flex;
+        align-items: center;
+        background: #2b2b2b;
+        color: white;
+        height: 32px;
+        padding: 0 10px;
+        font-size: 14px;
+        user-select: none;
+    }
+
+    .titlebar img {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+    }
+
+    .title-buttons {
+        margin-left: auto;
+        display: flex;
+    }
+
+    .title-btn {
+        width: 45px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .title-btn:hover {
+        background: rgba(255,255,255,0.15);
+        cursor: default;
+    }
+
+    .title-btn.close:hover {
+        background: #E81123;
+    }
+
+    .screen {
+        width: 100%;
+        height: 60px;
+        background: white;
+        border: none;
+        padding: 10px;
+        font-size: 28px;
+        text-align: right;
+        box-sizing: border-box;
+        color: #333;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .btn {
+        background: #e6e6e6;
+        border: none;
+        height: 48px;
+        border-radius: 4px;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .btn:hover {
+        background: #dcdcdc;
+        cursor: pointer;
+    }
+
+    .btn:active {
+        background: #c8c8c8;
+    }
+
+    .zero {
+        grid-column: span 2;
+    }
+</style>
+</head>
+<body>
+
+<div class="window">
+    <div class="titlebar">
+        <img src="psicon.png">
+        Calculadora
+        <div class="title-buttons">
+            <div class="title-btn">—</div>
+            <div class="title-btn">▢</div>
+            <div class="title-btn close">✕</div>
+        </div>
+    </div>
+
+    <input id="display" class="screen" type="text" value="0" readonly>
+
+    <div class="buttons">
+        <button class="btn" data-op="C">C</button>
+        <button class="btn" data-op="/">/</button>
+        <button class="btn" data-op="*">*</button>
+        <button class="btn" data-op="-">-</button>
+
+        <button class="btn">7</button>
+        <button class="btn">8</button>
+        <button class="btn">9</button>
+        <button class="btn" data-op="+">+</button>
+
+        <button class="btn">4</button>
+        <button class="btn">5</button>
+        <button class="btn">6</button>
+        <button class="btn" data-op="=">=</button>
+
+        <button class="btn">1</button>
+        <button class="btn">2</button>
+        <button class="btn">3</button>
+
+        <button class="btn zero">0</button>
+        <button class="btn">.</button>
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById("display");
+    let current = "";
+    let operator = null;
+    let operand = null;
+
+    document.querySelectorAll(".btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const val = btn.innerText;
+            const op = btn.dataset.op;
+
+            if (op === "C") {
+                current = "";
+                operator = null;
+                operand = null;
+                display.value = "0";
+                return;
+            }
+
+            if (op === "+" || op === "-" || op === "*" || op === "/") {
+                operand = parseFloat(display.value);
+                operator = op;
+                current = "";
+                return;
+            }
+
+            if (op === "=") {
+                if (operator && operand !== null) {
+                    const num = parseFloat(display.value);
+                    let result = 0;
+                    if (operator === "+") result = operand + num;
+                    if (operator === "-") result = operand - num;
+                    if (operator === "*") result = operand * num;
+                    if (operator === "/") result = operand / num;
+
+                    display.value = result;
+                    operator = null;
+                    operand = null;
+                }
+                return;
+            }
+
+            // Números y punto
+            if (val === "." && current.includes(".")) return;
+            current += val;
+            display.value = current;
+        });
+    });
+</script>
+
+</body>
+</html>

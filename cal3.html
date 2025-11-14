@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Calculadora VB6</title>
+<style>
+    body {
+        background: #008080;
+        font-family: "MS Sans Serif", Tahoma, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .window {
+        width: 260px;
+        background: #C0C0C0;
+        border: 2px solid #FFFFFF;
+        border-right-color: #404040;
+        border-bottom-color: #404040;
+        box-shadow: 2px 2px 0 #000;
+    }
+
+    .titlebar {
+        background: linear-gradient(to right, #000080, #1084d0);
+        color: white;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        padding: 0 4px;
+        font-size: 12px;
+        user-select: none;
+    }
+
+    .titlebar img {
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+    }
+
+    .title-buttons {
+        margin-left: auto;
+        display: flex;
+        gap: 2px;
+    }
+
+    .title-btn {
+        width: 16px;
+        height: 14px;
+        background: #C0C0C0;
+        border: 1px solid #404040;
+        border-top-color: #FFFFFF;
+        border-left-color: #FFFFFF;
+        font-size: 10px;
+        text-align: center;
+        line-height: 12px;
+        user-select: none;
+    }
+
+    .screen {
+        width: calc(100% - 20px);
+        margin: 10px;
+        height: 34px;
+        background: white;
+        border: 2px inset #808080;
+        font-size: 18px;
+        text-align: right;
+        padding: 4px;
+        box-sizing: border-box;
+    }
+
+    .buttons {
+        padding: 5px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+
+    .btn {
+        background: #E0E0E0;
+        border: 2px solid #FFFFFF;
+        border-right-color: #404040;
+        border-bottom-color: #404040;
+        height: 32px;
+        font-size: 14px;
+        user-select: none;
+    }
+
+    .btn:active {
+        border: 2px solid #404040;
+        border-right-color: #FFFFFF;
+        border-bottom-color: #FFFFFF;
+    }
+
+    .zero {
+        grid-column: span 2;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="window">
+    <div class="titlebar">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/PowerShell_Core_6.0_icon.png">
+        Calculadora
+        <div class="title-buttons">
+            <div class="title-btn">–</div>
+            <div class="title-btn">□</div>
+            <div class="title-btn">×</div>
+        </div>
+    </div>
+
+    <input id="display" class="screen" type="text" value="0" readonly>
+
+    <div class="buttons">
+        <button class="btn" data-op="C">C</button>
+        <button class="btn" data-op="/">/</button>
+        <button class="btn" data-op="*">*</button>
+        <button class="btn" data-op="-">-</button>
+
+        <button class="btn">7</button>
+        <button class="btn">8</button>
+        <button class="btn">9</button>
+        <button class="btn" data-op="+">+</button>
+
+        <button class="btn">4</button>
+        <button class="btn">5</button>
+        <button class="btn">6</button>
+        <button class="btn" data-op="=">=</button>
+
+        <button class="btn">1</button>
+        <button class="btn">2</button>
+        <button class="btn">3</button>
+
+        <button class="btn zero">0</button>
+        <button class="btn">.</button>
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById("display");
+    let current = "";
+    let operator = null;
+    let operand = null;
+
+    document.querySelectorAll(".btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const val = btn.innerText;
+            const op = btn.dataset.op;
+
+            if (op === "C") {
+                current = "";
+                operator = null;
+                operand = null;
+                display.value = "0";
+                return;
+            }
+
+            if (op === "+" || op === "-" || op === "*" || op === "/") {
+                operand = parseFloat(display.value);
+                operator = op;
+                current = "";
+                return;
+            }
+
+            if (op === "=") {
+                if (operator && operand !== null) {
+                    const num = parseFloat(display.value);
+                    let result = 0;
+                    if (operator === "+") result = operand + num;
+                    if (operator === "-") result = operand - num;
+                    if (operator === "*") result = operand * num;
+                    if (operator === "/") result = operand / num;
+
+                    display.value = result;
+                    operator = null;
+                    operand = null;
+                }
+                return;
+            }
+
+            // Números y punto
+            if (val === "." && current.includes(".")) return;
+            current += val;
+            display.value = current;
+        });
+    });
+</script>
+
+</body>
+</html>

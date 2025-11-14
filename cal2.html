@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Calculadora - WinForms look</title>
+<style>
+  :root{
+    --bg: #cfcfcf;
+    --title-grad-from: #e8eef7;
+    --title-grad-to: #c7d7ef;
+    --title-text: #021024;
+    --win-border: #6e6e6e;
+    --button-face: #e0e0e0;
+    --button-shadow-dark: rgba(0,0,0,0.35);
+    --button-shadow-light: rgba(255,255,255,0.9);
+    --accent: #f0a23a;
+  }
+
+  html,body{height:100%;margin:0;font-family: "Segoe UI", Tahoma, Arial, sans-serif;background:linear-gradient(#e6e6e6,#d6d6d6);display:flex;align-items:center;justify-content:center;padding:20px;}
+
+  /* Window shell */
+  .window{
+    width: 320px;
+    border: 1px solid var(--win-border);
+    background: linear-gradient(#f7f7f7,#e9e9e9);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    border-radius: 4px;
+    overflow: visible;
+    position: absolute; /* draggable */
+    left: calc(50% - 160px);
+    top: calc(50% - 200px);
+    user-select: none;
+  }
+
+  /* Title bar */
+  .titlebar{
+    height: 30px;
+    display:flex;
+    align-items:center;
+    padding: 0 6px 0 8px;
+    background: linear-gradient(var(--title-grad-from), var(--title-grad-to));
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    cursor: move;
+  }
+  .titlebar .icon{
+    width:18px;height:18px;border-radius:3px;background:linear-gradient(#fffbef,#ffd79b);
+    border:1px solid rgba(0,0,0,0.12);margin-right:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;color:#7a4b07;
+  }
+  .titlebar .title{flex:1;color:var(--title-text);font-weight:600;font-size:13px;letter-spacing:0.2px;}
+  .titlebar .win-buttons{display:flex;gap:6px;align-items:center}
+  .win-btn{
+    width:34px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:13px;box-shadow:inset 0 1px 0 var(--button-shadow-light), inset 0 -1px 0 rgba(0,0,0,0.06);
+    border:1px solid rgba(0,0,0,0.12);background:var(--button-face);cursor:pointer;
+  }
+  .win-btn:hover{filter:brightness(0.98)}
+  .win-btn.close{background:linear-gradient(#ff7b7b,#ff4e4e);color:white;box-shadow:0 1px 0 rgba(0,0,0,0.2);}
+  .win-btn.restore{font-size:12px}
+  .win-btn:active{transform:translateY(1px)}
+
+  /* Content area */
+  .content{padding:12px 12px 16px;}
+  .display{
+    height:56px;border-radius:4px;padding:8px 10px;background:#222;color:#fff;font-size:26px;text-align:right;
+    display:flex;flex-direction:column;justify-content:center;box-shadow: inset 0 -3px 6px rgba(0,0,0,0.25);
+    border:1px solid rgba(0,0,0,0.25);margin-bottom:10px;
+  }
+  .display .small{font-size:12px;opacity:0.75;text-align:right;}
+  .display .big{font-weight:600;letter-spacing:0.5px;}
+
+  /* Grid of buttons */
+  .keys{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap:8px;
+  }
+
+  button.key{
+    height:44px;border-radius:4px;border:1px solid rgba(0,0,0,0.15);
+    background:linear-gradient(#f3f3f3,#dcdcdc);
+    box-shadow: inset 0 2px 0 var(--button-shadow-light), 0 2px 0 rgba(0,0,0,0.06);
+    font-size:16px;font-weight:600;cursor:pointer;
+  }
+  button.key:active{transform:translateY(1px);box-shadow: none;}
+  .key.op{background:linear-gradient(#f9f4ee,#f0e3cf);color:#222}
+  .key.func{background:linear-gradient(#eef6ff,#dbeefb);font-weight:700}
+  .key.wide{grid-column: span 2;}
+  .key.zero{grid-column: span 2;text-align:left;padding-left:18px;}
+
+  /* Footer tiny hint */
+  .hint{font-size:11px;color:#444;margin-top:8px;text-align:right;opacity:0.8}
+
+  /* Minimized state */
+  .minimized{height:30px;width:200px;display:flex;align-items:center;overflow:hidden}
+  .minimized .content{display:none}
+  .hidden{display:none!important}
+
+  /* Maximize helper */
+  .maximized{
+    left: 10px !important;
+    top: 10px !important;
+    width: calc(100% - 20px) !important;
+    height: calc(100% - 20px) !important;
+    border-radius:6px;
+  }
+
+  /* Small responsive */
+  @media (max-width:400px){
+    .window{width:94%;left:3%;top:8%;}
+  }
+</style>
+</head>
+<body>
+  <div id="app" class="window" role="application" aria-label="Calculadora estilo Windows">
+    <div class="titlebar" id="titlebar">
+      <div class="icon">C</div>
+      <div class="title">Calculadora</div>
+      <div class="win-buttons">
+        <div class="win-btn" id="minBtn" title="Minimizar">—</div>
+        <div class="win-btn restore" id="maxBtn" title="Maximizar">▢</div>
+        <div class="win-btn close" id="closeBtn" title="Cerrar">✕</div>
+      </div>
+    </div>
+
+    <div class="content" id="content">
+      <div class="display" id="display" aria-live="polite">
+        <div class="small" id="subdisplay">&nbsp;</div>
+        <div class="big" id="maindisplay">0</div>
+      </div>
+
+      <div class="keys" id="keys">
+        <button class="key func" data-action="clear">C</button>
+        <button class="key func" data-action="sign">±</button>
+        <button class="key func" data-action="percent">%</button>
+        <button class="key op" data-action="/">÷</button>
+
+        <button class="key" data-num="7">7</button>
+        <button class="key" data-num="8">8</button>
+        <button class="key" data-num="9">9</button>
+        <button class="key op" data-action="*">×</button>
+
+        <button class="key" data-num="4">4</button>
+        <button class="key" data-num="5">5</button>
+        <button class="key" data-num="6">6</button>
+        <button class="key op" data-action="-">−</button>
+
+        <button class="key" data-num="1">1</button>
+        <button class="key" data-num="2">2</button>
+        <button class="key" data-num="3">3</button>
+        <button class="key op" data-action="+">+</button>
+
+        <button class="key zero" data-num="0">0</button>
+        <button class="key" data-action=".">.</button>
+        <button class="key op" data-action="=">=</button>
+      </div>
+
+      <div class="hint">Teclado: números, + - * / Enter =, Backspace, Esc (C)</div>
+    </div>
+  </div>
+
+<script>
+/* ---------- ventana - drag y controles ---------- */
+(function(){
+  const app = document.getElementById('app');
+  const titlebar = document.getElementById('titlebar');
+  const minBtn = document.getElementById('minBtn');
+  const maxBtn = document.getElementById('maxBtn');
+  const closeBtn = document.getElementById('closeBtn');
+
+  let dragging = false;
+  let offset = {x:0,y:0};
+  let prevRect = null;
+  let isMax = false;
+  let isMin = false;
+
+  titlebar.addEventListener('mousedown', (e)=>{
+    if(e.target.closest('.win-btn')) return; // don't start drag when clicking buttons
+    dragging = true;
+    const rect = app.getBoundingClientRect();
+    offset.x = e.clientX - rect.left;
+    offset.y = e.clientY - rect.top;
+    app.style.transition = 'none';
+    document.body.style.cursor = 'grabbing';
+  });
+  document.addEventListener('mousemove', (e)=>{
+    if(!dragging) return;
+    let x = e.clientX - offset.x;
+    let y = e.clientY - offset.y;
+    // keep within viewport
+    const pad = 8;
+    x = Math.max(pad, Math.min(x, window.innerWidth - app.offsetWidth - pad));
+    y = Math.max(pad, Math.min(y, window.innerHeight - 40 - pad));
+    app.style.left = x + 'px';
+    app.style.top = y + 'px';
+  });
+  document.addEventListener('mouseup', ()=>{ dragging = false; document.body.style.cursor = ''; app.style.transition = ''; });
+
+  // Minimize
+  minBtn.addEventListener('click', ()=>{
+    if(isMin){
+      // restore
+      app.classList.remove('minimized');
+      isMin = false;
+    } else {
+      app.classList.add('minimized');
+      isMin = true;
+    }
+  });
+
+  // Maximize / Restore
+  maxBtn.addEventListener('click', ()=>{
+    if(!isMax){
+      // save rect
+      prevRect = {left: app.style.left, top: app.style.top, width: app.style.width, height: app.style.height};
+      app.classList.add('maximized');
+      isMax = true;
+      maxBtn.textContent = '❐';
+    } else {
+      app.classList.remove('maximized');
+      // restore previous position if we saved it
+      if(prevRect){
+        app.style.left = prevRect.left || '';
+        app.style.top = prevRect.top || '';
+        app.style.width = prevRect.width || '';
+        app.style.height = prevRect.height || '';
+      }
+      isMax = false;
+      maxBtn.textContent = '▢';
+    }
+  });
+
+  // Close (hide)
+  closeBtn.addEventListener('click', ()=>{ app.classList.add('hidden'); });
+
+  // double click titlebar toggles maximize
+  titlebar.addEventListener('dblclick', ()=>{ maxBtn.click(); });
+
+  // accessibility: allow double click to restore when minimized
+  app.addEventListener('dblclick', ()=>{
+    if(app.classList.contains('minimized')){ minBtn.click(); }
+  });
+})();
+
+/* ---------- lógica de calculadora ---------- */
+(function(){
+  const main = document.getElementById('maindisplay');
+  const sub = document.getElementById('subdisplay');
+  const keys = document.getElementById('keys');
+
+  let displayValue = '0';
+  let waitingForOperand = false;
+  let operator = null;
+  let operand = null;
+
+  function updateDisplay(){
+    main.textContent = displayValue;
+    sub.textContent = operator ? (operand !== null ? `${operand} ${operator}` : operator) : '\xa0';
+  }
+
+  function inputDigit(d){
+    if(waitingForOperand){
+      displayValue = d;
+      waitingForOperand = false;
+    } else {
+      if(displayValue === '0') displayValue = d;
+      else displayValue = displayValue + d;
+    }
+    updateDisplay();
+  }
+
+  function inputDot(){
+    if(waitingForOperand){
+      displayValue = '0.';
+      waitingForOperand = false;
+    } else if(!displayValue.includes('.')){
+      displayValue += '.';
+    }
+    updateDisplay();
+  }
+
+  function clearAll(){
+    displayValue = '0';
+    waitingForOperand = false;
+    operator = null;
+    operand = null;
+    updateDisplay();
+  }
+
+  function clearEntry(){
+    displayValue = '0';
+    updateDisplay();
+  }
+
+  function toggleSign(){
+    if(displayValue === '0') return;
+    displayValue = (parseFloat(displayValue) * -1).toString();
+    updateDisplay();
+  }
+
+  function inputPercent(){
+    let val = parseFloat(displayValue);
+    val = val / 100;
+    displayValue = val.toString();
+    updateDisplay();
+  }
+
+  function inputSqrt(){
+    let val = parseFloat(displayValue);
+    if(val < 0){ displayValue = 'Error'; updateDisplay(); return; }
+    displayValue = Math.sqrt(val).toString();
+    updateDisplay();
+  }
+
+  function performOperation(nextOp){
+    const inputValue = parseFloat(displayValue);
+
+    if(operand === null){
+      operand = inputValue;
+    } else if(operator){
+      const result = calculate(operand, operator, inputValue);
+      operand = result;
+      displayValue = String(result);
+    }
+
+    waitingForOperand = true;
+    operator = nextOp === '=' ? null : nextOp;
+    if(operator === null) operand = null;
+    updateDisplay();
+  }
+
+  function calculate(a, op, b){
+    a = parseFloat(a); b = parseFloat(b);
+    let res = 0;
+    switch(op){
+      case '+': res = a + b; break;
+      case '-': res = a - b; break;
+      case '*': res = a * b; break;
+      case '/': res = b === 0 ? 'Error' : a / b; break;
+      default: res = b;
+    }
+    // reduce floating artifacts
+    if(typeof res === 'number' && isFinite(res)){
+      res = parseFloat(res.toPrecision(12));
+    }
+    return res;
+  }
+
+  // delegate clicks
+  keys.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    if(btn.dataset.num !== undefined){
+      inputDigit(btn.dataset.num);
+      return;
+    }
+    const action = btn.dataset.action;
+    switch(action){
+      case '.': inputDot(); break;
+      case 'clear': clearAll(); break;
+      case 'sign': toggleSign(); break;
+      case 'percent': inputPercent(); break;
+      case 'sqrt': inputSqrt(); break;
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+      case '=':
+        performOperation(action);
+        break;
+    }
+  });
+
+  // keyboard support
+  document.addEventListener('keydown', (e)=>{
+    if(e.key >= '0' && e.key <= '9'){ inputDigit(e.key); e.preventDefault(); return; }
+    if(e.key === '.' || e.key === ','){ inputDot(); e.preventDefault(); return; }
+    if(e.key === 'Enter' || e.key === '='){ performOperation('='); e.preventDefault(); return; }
+    if(e.key === '+'){ performOperation('+'); e.preventDefault(); return; }
+    if(e.key === '-'){ performOperation('-'); e.preventDefault(); return; }
+    if(e.key === '*' || e.key === 'x' || e.key === 'X'){ performOperation('*'); e.preventDefault(); return; }
+    if(e.key === '/'){ performOperation('/'); e.preventDefault(); return; }
+    if(e.key === 'Backspace'){ clearEntry(); e.preventDefault(); return; }
+    if(e.key === 'Escape'){ clearAll(); e.preventDefault(); return; }
+  });
+
+  // init
+  updateDisplay();
+})();
+</script>
+</body>
+</html>
