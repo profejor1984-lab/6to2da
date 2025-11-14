@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadoras Web – 6°2°</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#08a0d8; --muted:#9aa7b2; --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui;background:linear-gradient(180deg,#071025 0%,var(--bg) 70%);color:#e6eef6}
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px)}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4cd3ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#022033;font-size:18px}
+    .title{line-height:1}
+    .title h1{margin:0;font-size:18px}
+    .title p{margin:0;font-size:13px;color:var(--muted)}
+    nav{display:flex;gap:12px}
+    .navlink{color:#cfefff;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600}
+    .navlink:hover{background:rgba(255,255,255,0.02)}
+    .container{max-width:900px;margin:32px auto;padding:20px}
+    .card{background:linear-gradient(180deg,var(--card),#07111a);padding:22px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,12,0.6);border:1px solid rgba(255,255,255,0.03);margin-bottom:22px}
+    h2{margin-top:0;font-size:26px}
+    h3{margin-top:0;font-size:20px}
+    .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:18px}
+    .menu-item{padding:14px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.02)}
+    a.button{display:inline-block;padding:10px 14px;border-radius:8px;background:var(--accent);color:#01232f;text-decoration:none;font-weight:700}
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">6°2°</div>
+    <div class="title">
+      <h1>Calculadoras Web</h1>
+      <p>Proyecto de los alumnos – Powershell + Windows Forms</p>
+    </div>
+  </div>
+  <nav>
+    <a class="navlink" href="index.html">Inicio</a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="card">
+    <h2>Versión Web de las Calculadoras</h2>
+    <p class="muted">Estas calculadoras son la adaptación web de los proyectos desarrollados por los alumnos de 6°2° en Powershell y Windows Forms. Durante la cursada, los estudiantes diseñaron e implementaron calculadoras funcionales utilizando:</p>
+    <ul>
+      <li>Powershell como lenguaje principal</li>
+      <li>Windows Forms para la interfaz gráfica clásica al estilo Visual Basic</li>
+      <li>Manejo de eventos, validaciones y controles</li>
+      <li>Diseño de interfaz inspirado en calculadoras históricas y modernas</li>
+    </ul>
+    <p class="muted">La versión web mantiene el espíritu visual y funcional de los trabajos originales, permitiendo acceder a ellos desde cualquier navegador.</p>
+  </section>
+
+  <section class="card">
+    <h3>Calculadoras Disponibles</h3>
+    <p class="muted">Elegí una calculadora para abrir su versión web:</p>
+
+    <div class="grid">
+      <div class="menu-item">
+        <h4>Calculadora 1</h4>
+        <p class="muted small">Versión web de cal1.ps1</p>
+        <a class="button" href="cal1.html">Abrir</a>
+      </div>
+
+      <div class="menu-item">
+        <h4>Calculadora 2</h4>
+        <p class="muted small">Versión web de cal2.ps1</p>
+        <a class="button" href="cal2.html">Abrir</a>
+      </div>
+
+      <div class="menu-item">
+        <h4>Calculadora 3</h4>
+        <p class="muted small">Versión web de cal3.ps1</p>
+        <a class="button" href="cal3.html">Abrir</a>
+      </div>
+
+      <div class="menu-item">
+        <h4>Calculadora 4</h4>
+        <p class="muted small">Versión web de cal4.ps1</p>
+        <a class="button" href="cal4.html">Abrir</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
