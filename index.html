@@ -1,78 +1,92 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>6°2° - Escuela Secundaria Técnica N°4</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E6%C2%B02%C2%B0%3C/text%3E%3C/svg%3E">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#08a0d8; --muted:#9aa7b2; --glass: rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#071025 0%,var(--bg) 70%);color:#e6eef6}
-    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px)}
-    .brand{display:flex;gap:14px;align-items:center}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4cd3ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#022033;font-size:18px}
-    .title{line-height:1}
-    .title h1{margin:0;font-size:18px;letter-spacing:0.6px}
-    .title p{margin:0;font-size:13px;color:var(--muted)}
-    nav{display:flex;gap:12px;align-items:center}
-    .navlink{color:#cfefff;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600}
-    .navlink:hover{background:rgba(255,255,255,0.02)}
-    .container{max-width:1000px;margin:32px auto;padding:20px}
-    .hero{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:center}
-    .card{background:linear-gradient(180deg,var(--card),#07111a);padding:22px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,12,0.6);border:1px solid rgba(255,255,255,0.03)}
-    .hero h2{margin:0 0 10px 0;font-size:28px}
-    .hero p{color:var(--muted);margin:0 0 16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}
-    .menu-item{padding:14px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.02)}
-    .menu-item h3{margin:0 0 6px 0}
-    footer{text-align:center;color:var(--muted);padding:28px 6px}
-    /* sections */
-    section{margin-top:24px}
-    h3.section-title{font-size:20px;margin:0 0 12px}
-    /* responsive */
-    @media (max-width:880px){.hero{grid-template-columns:1fr}nav{display:none}.brand{gap:10px}}
-    /* small helpers */
-    a.button{display:inline-block;padding:10px 14px;border-radius:8px;background:var(--accent);color:#01232f;text-decoration:none;font-weight:700}
-    .muted{color:var(--muted)}
-    .small{font-size:13px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6°2° - Escuela Secundaria Técnica 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e5ecf6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #34495e;
+            overflow: hidden;
+        }
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #2c3e50;
+        }
+        .contenido {
+            padding: 20px;
+        }
+        .tarjeta {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <div class="logo">6°2°</div>
-      <div class="title">
-        <h1>6°2° — Escuela Secundaria Técnica N°4</h1>
-        <p class="small">Profes: Correa y Gomez</p>
-      </div>
-    </div>
-    <nav>
-      <a class="navlink" href="lamaquina.html">La Máquina</a>
-      <a class="navlink" href="mv/maquina-virtual.html>Máquina Virtual</a>
-        <a class="navlink" href="calculadoras_web.html">Calculadoras</a>
-    </nav>
-  </header>
+    <header>
+        <h1>6°2° - Escuela Secundaria Técnica 4</h1>
+        <p>Docentes: Correa y Gomez</p>
+    </header>
 
-  <main class="container">
-    <div class="hero">
-      <div class="card">
-        <h2>Bienvenidos a 6°2°</h2>
-        <p class="muted">Portal de la materia - Instalación, Mantenimiento y Reparación de Redes Informáticas. Materiales, herramientas y ejercicios para la cursada.</p>
-        <div class="grid">
-          <div class="menu-item">
-            <h3>La Máquina</h3>
-            <p class="small muted">Información sobre la máquina física: especificaciones, laboratorio y normas de uso.</p>
-            <p><a href="#la-maquina" class="button">Ver</a></p>
-          </div>
-          <div class="menu-item">
-            <h3>Máquina Virtual</h3>
-            <p class="small muted">Cómo levantar VMs, imágenes recomendadas y ejercicios prácticos para virtualización.</p>
-            <p><a href="#maquina-virtual" class="button">Abrir</a></p>
-          </div>
-          <div class="menu-item">
-            <h3>Calculadoras</h3>
-            <p class="small muted">Acceso rapido a calculadoras út
+    <nav>
+        <a href="info.html">Esta web</a>
+        <a href="maquina.html">La Máquina</a>
+        <a href="maq/maquinavirtual.html">Máquina Virtual</a>
+        <a href="calculadoras_web.html">Calculadoras</a>
+    </nav>
+
+    <div class="contenido">
+        <div class="tarjeta">
+            <h2>Bienvenidos</h2>
+            <p>Este es el sitio oficial del curso <strong>6°2° de la Escuela Secundaria Técnica 4</strong>. Aquí encontrarán material, proyectos y recursos utilizados en las materias.</p>
+        </div>
+
+        <div class="tarjeta">
+            <h2>Materias que abarcamos</h2>
+            <ul>
+                <li>Redes</li>
+                <li>Sistemas Operativos</li>
+                <li>Aplicaciones Web</li>
+            </ul>
+        </div>
+
+        <div class="tarjeta">
+            <h2>Sobre los docentes</h2>
+            <p>Los profesores <strong>Correa</strong> y <strong>Gomez</strong> acompañan a los estudiantes en el desarrollo de habilidades técnicas y proyectos reales que integran diversas áreas de la informática.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 - 6°2° EST N°4
+    </footer>
+</body>
+</html>
