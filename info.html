@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del sitio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e5ecf6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #34495e;
+            overflow: hidden;
+        }
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #2c3e50;
+        }
+        .contenido {
+            padding: 20px;
+        }
+        .tarjeta {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Información del Sitio Web</h1>
+        <p>Cómo los alumnos de 6°2° crearon su propia página web</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="maquina.html">La Máquina</a>
+        <a href="maq/maquinavirtual.html">Máquina Virtual</a>
+        <a href="calculadoras_web.html">Calculadoras</a>
+    </nav>
+
+    <div class="contenido">
+        <div class="tarjeta">
+            <h2>1. Compra del dominio en NIC.ar</h2>
+            <p>Los alumnos aprendieron que un <strong>dominio</strong> es el nombre único que identifica un sitio web en Internet. Por ejemplo, <strong>6to2da.com.ar</strong> es el dominio elegido para este proyecto.</p>
+            <p>Se registró mediante <strong>NIC.ar</strong>, el organismo oficial que administra los dominios .ar en Argentina. Allí se realizó la compra, activación y delegación inicial del dominio.</p>
+        </div>
+
+        <div class="tarjeta">
+            <h2>2. Uso de Cloudflare</h2>
+            <p>Luego se configuró el dominio en <strong>Cloudflare</strong>, un servicio que permite administrar los DNS, mejorar la seguridad y acelerar la entrega del sitio.</p>
+            <p>En esta etapa los estudiantes aprendieron a:</p>
+            <ul>
+                <li>Cambiar los servidores de nombre (nameservers).</li>
+                <li>Agregar registros DNS tipo <strong>A</strong> y <strong>CNAME</strong>.</li>
+                <li>Esperar la propagación del DNS hasta que el dominio quedara activo.</li>
+            </ul>
+        </div>
+
+        <div class="tarjeta">
+            <h2>3. Publicación del sitio con GitHub Pages</h2>
+            <p>Finalmente, el sitio fue subido a un repositorio de GitHub y publicado mediante <strong>GitHub Pages</strong>. Este servicio permite alojar sitios web estáticos gratis y de forma muy simple.</p>
+            <p>Los alumnos configuraron:</p>
+            <ul>
+                <li>El repositorio del curso: <strong>6to2da</strong>.</li>
+                <li>La rama <strong>main</strong> como fuente del sitio.</li>
+                <li>La conexión entre GitHub Pages y el dominio personalizado.</li>
+            </ul>
+            <p>Así, cada archivo HTML del repositorio se transforma automáticamente en una página pública accesible desde Internet.</p>
+        </div>
+
+        <div class="tarjeta">
+            <h2>Resultado final</h2>
+            <p>Gracias a estos pasos, los estudiantes lograron montar un sitio web real, con dominio propio y publicación profesional. Este proyecto integra conocimientos de redes, gestión de DNS, sistemas operativos y aplicaciones web.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 - 6°2° EST N°4
+    </footer>
+</body>
+</html>
