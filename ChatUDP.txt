@@ -1,0 +1,66 @@
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+# CONFIGURACIÓN PARA CADA PC
+$IP_Del_Companero = "192.168.0.15"   # ← CAMBIAR A LA IP DE LA OTRA PC
+$Puerto = 50000
+
+# OBJETOS UDP
+$Receptor = New-Object System.Net.Sockets.UdpClient $Puerto
+$Emisor   = New-Object System.Net.Sockets.UdpClient
+$DireccionRemota = [System.Net.IPEndPoint]::new([System.Net.IPAddress]::Parse($IP_Del_Companero), $Puerto)
+
+# FORM
+$Form = New-Object System.Windows.Forms.Form
+$Form.Text = "Chat UDP"
+$Form.Width = 400
+$Form.Height = 200
+$Form.StartPosition = "CenterScreen"
+
+# CONTROLES
+$Label = New-Object System.Windows.Forms.Label
+$Label.Text = "Esperando mensaje..."
+$Label.Left = 10
+$Label.Top = 20
+$Label.Width = 350
+$Label.Height = 40
+$Label.Font = "Arial,12"
+$Form.Controls.Add($Label)
+
+$Textbox = New-Object System.Windows.Forms.TextBox
+$Textbox.Left = 10
+$Textbox.Top = 70
+$Textbox.Width = 250
+$Form.Controls.Add($Textbox)
+
+$Boton = New-Object System.Windows.Forms.Button
+$Boton.Text = "Enviar"
+$Boton.Left = 270
+$Boton.Top = 70
+$Boton.Width = 80
+$Form.Controls.Add($Boton)
+
+# EVENTO DEL BOTÓN
+$Boton.Add_Click({
+    if ($Textbox.Text -ne "") {
+        $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Textbox.Text)
+        $Emisor.Send($Bytes, $Bytes.Length, $DireccionRemota) | Out-Null
+        $Textbox.Clear()
+    }
+})
+
+# TIMER: REVISAR MENSAJES
+$Timer = New-Object System.Windows.Forms.Timer
+$Timer.Interval = 500
+$Timer.Add_Tick({
+    if ($Receptor.Available -gt 0) {
+        $RemoteEndPoint = New-Object System.Net.IPEndPoint([System.Net.IPAddress]::Any, 0)
+        $Datos = $Receptor.Receive([ref]$RemoteEndPoint)
+        $Texto = [System.Text.Encoding]::UTF8.GetString($Datos)
+        $Label.Text = $Texto
+    }
+})
+$Timer.Start()
+
+# EJECUTAR FORM
+[System.Windows.Forms.Application]::Run($Form)
