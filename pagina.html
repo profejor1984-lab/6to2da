@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muestra Técnica 2026 - Escuela Técnica N.º 4 (Sexto Segunda)</title>
+
+    <style>
+        /* ==========================================================================
+           1. ESTILOS GLOBALES Y RESET BÁSICO
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #2d3748;
+            background-color: #f7fafc;
+            padding: 0;
+        }
+
+        /* Contenedor principal sin anchos excesivos para legibilidad */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        /* ==========================================================================
+           2. ENCABEZADO E INFORMACIÓN INSTITUCIONAL
+           ========================================================================== */
+        header {
+            background-color: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            color: #1a202c;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #3182ce;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .info-panel {
+            display: inline-block;
+            background-color: #edf2f7;
+            border-radius: 6px;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.95rem;
+            text-align: left;
+            max-width: 100%;
+        }
+
+        .info-panel p {
+            margin-bottom: 0.25rem;
+        }
+
+        .info-panel p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           3. ESTRUCTURA DE SECCIONES Y ENCABEZADOS
+           ========================================================================== */
+        section {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            color: #2b6cb0;
+            border-bottom: 2px solid #ebf8ff;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ==========================================================================
+           4. SECCIÓN DE ALUMNOS (DISEÑO COMPACTO MULTICOLUMNA)
+           ========================================================================== */
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .group-box {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            padding: 1rem;
+        }
+
+        .group-box h3 {
+            font-size: 1.1rem;
+            color: #2d3748;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.25rem;
+        }
+
+        .students-list {
+            list-style: decimal inside;
+            font-size: 0.95rem;
+        }
+
+        .students-list li {
+            padding: 0.2rem 0;
+            color: #4a5568;
+        }
+
+        /* ==========================================================================
+           5. PROYECTOS Y REPRODUCTORES DE VIDEO LAZY-LOAD
+           ========================================================================== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-description {
+            font-size: 0.95rem;
+            color: #4a5568;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        /* Contenedor del video diferido */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* Aspect ratio 16:9 */
+            background-color: #1a202c;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .video-container iframe,
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .video-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        .video-placeholder::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.35);
+        }
+
+        .play-button {
+            position: relative;
+            z-index: 1;
+            width: 54px;
+            height: 54px;
+            background-color: rgba(229, 62, 62, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-button::after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 9px 0 9px 16px;
+            border-color: transparent transparent transparent #ffffff;
+            margin-left: 3px;
+        }
+
+        .video-unconfigured {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #edf2f7;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px dashed #cbd5e0;
+        }
+
+        /* ==========================================================================
+           6. SECCIÓN TÉCNICA (HARDWARE, FRONTEND, BACKEND, PROTOCOLOS)
+           ========================================================================== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tech-category {
+            background-color: #f7fafc;
+            border-left: 3px solid #3182ce;
+            padding: 0.75rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tech-category h3 {
+            font-size: 0.95rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tech-category ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .tech-category li {
+            margin-bottom: 0.3rem;
+            color: #4a5568;
+        }
+
+        .tech-category li strong {
+            color: #1a202c;
+        }
+
+        /* ==========================================================================
+           7. PIE DE PÁGINA
+           ========================================================================== */
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======================================================================= -->
+    <!-- ENCABEZADO INSTITUCIONAL                                                -->
+    <!-- ======================================================================= -->
+    <header>
+        <h1 class="header-title" id="inst-nombre">Escuela Técnica N.º 4</h1>
+        <div class="header-subtitle" id="inst-evento">Muestra 2026</div>
+        <div class="info-panel">
+            <p><strong>Curso:</strong> <span id="inst-curso">Sexto Segunda</span></p>
+            <p><strong>Docentes a cargo:</strong> <span id="inst-profesores">Cargando...</span></p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- =================================================================== -->
+        <!-- LISTA DE ALUMNOS (PROTAGONISTAS DE LA MUESTRA)                      -->
+        <!-- =================================================================== -->
+        <section>
+            <h2 class="section-title">Los protagonistas de esta muestra</h2>
+            <div class="students-grid">
+                <div class="group-box">
+                    <h3>Grupo 1</h3>
+                    <ol class="students-list" id="lista-grupo-1">
+                        <!-- Generado dinámicamente mediante JS -->
+                    </ol>
+                </div>
+                <div class="group-box">
+                    <h3>Grupo 2</h3>
+                    <ol class="students-list" id="lista-grupo-2">
+                        <!-- Generado dinámicamente mediante JS -->
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- PROYECTOS PRESENTADOS                                               -->
+        <!-- =================================================================== -->
+        <section>
+            <h2 class="section-title">Proyectos destacados</h2>
+            <div class="projects-grid" id="contenedor-proyectos">
+                <!-- Los 4 proyectos se inyectan dinámicamente -->
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- INFRAESTRUCTURA Y RED LOCAL                                         -->
+        <!-- =================================================================== -->
+        <section>
+            <h2 class="section-title" id="red-titulo">Una red para conectar nuestras ideas</h2>
+            <p class="project-description" id="red-descripcion" style="margin-bottom: 1rem;"></p>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="video-container" id="video-red-local">
+                    <!-- Reproductor diferido -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- TECNOLOGÍAS UTILIZADAS                                              -->
+        <!-- =================================================================== -->
+        <section>
+            <h2 class="section-title">Tecnologías utilizadas</h2>
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h3>Hardware e Infraestructura</h3>
+                    <ul>
+                        <li><strong>Router:</strong> Micronet SP916GNv2</li>
+                        <li><strong>Servidor:</strong> PC portátil</li>
+                        <li><strong>Clientes:</strong> Teléfonos Wi-Fi</li>
+                        <li><strong>Pantalla:</strong> TV vía HDMI</li>
+                    </ul>
+                </div>
+                <div class="tech-category">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li><strong>HTML:</strong> Estructura semántica</li>
+                        <li><strong>CSS:</strong> Presentación visual</li>
+                        <li><strong>JavaScript:</strong> Lógica e interacción</li>
+                    </ul>
+                </div>
+                <div class="tech-category">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li><strong>Go:</strong> Servidores y procesamiento lógico de las aplicaciones</li>
+                    </ul>
+                </div>
+                <div class="tech-category">
+                    <h3>Comunicación</h3>
+                    <ul>
+                        <li><strong>HTTP:</strong> Carga de páginas y recursos</li>
+                        <li><strong>WebSocket:</strong> Comunicación bidireccional en tiempo real</li>
+                        <li><strong>Wi-Fi:</strong> Red inalámbrica local</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ======================================================================= -->
+    <!-- PIE DE PÁGINA                                                           -->
+    <!-- ======================================================================= -->
+    <footer>
+        <p>Escuela Técnica N.º 4 — Muestra Anual de Proyectos 2026</p>
+    </footer>
+
+    <!-- ======================================================================= -->
+    <!-- LÓGICA DE CONFIGURACIÓN Y CARGA DIFERIDA DE VIDEOS                      -->
+    <!-- ======================================================================= -->
+    <script>
+        // =====================================================================
+        // CONFIGURACIÓN CENTRALIZADA DE LA PÁGINA
+        // MODIFICAR SOLAMENTE ESTA SECCIÓN PARA ACTUALIZAR DATOS
+        // =====================================================================
+
+        const CONFIGURACION = {
+            // 1. DATOS INSTITUCIONALES Y DOCENTES
+            institucion: "Escuela Secundaria Técnica Nº 4",
+            evento: "Muestra 2026 - Brief",
+            curso: "Sexto Segunda TECIP",
+            profesores: ["Jorge Gómez", "Karina Correa"],
+
+            // 2. IDENTIFICADORES DE YOUTUBE (Reemplazar "PEGAR_ID_..." por el ID real de 11 caracteres)
+            youtubeIDs: {
+                grip: "NRZCHvAS1DY",
+                burbujas: "WXPdKP3y8YY",
+                ahorcado: "WShOM1lMik0",
+                transfer: "YkxHrqGDL1Q",
+                redLocal: "jpyz2qIGE2M"
+            },
+
+            // 3. LISTA DE ALUMNOS (Exactamente 18 espacios. Asignar grupo 1 o 2 a cada uno)
+            alumnos: [
+                { nombre: "Aceval Carlos", grupo: 1 },
+                { nombre: "Bazan Angel", grupo: 1 },
+                { nombre: "Benitez Liz", grupo: 1 },
+                { nombre: "Flor Fernando", grupo: 1 },
+                { nombre: "Gutierres Enmanuel", grupo: 1 },
+                { nombre: "Jojot Thiago", grupo: 1 },
+                { nombre: "Medina Santiago", grupo: 1 },
+                { nombre: "Abadie Thiago", grupo: 2 },
+                { nombre: "Loza Maximo", grupo: 2 },
+                { nombre: "Mercado Dylan", grupo: 2 },
+                { nombre: "Miranda Lazaro", grupo: 2 },
+                { nombre: "Ocampo Jonathan", grupo: 2 },
+                { nombre: "Ruiz Thiara", grupo: 2 },
+                { nombre: "Sanchez Zaira", grupo: 2 },
+
+            ],
+
+            // 4. DESCRIPCIONES DE LOS PROYECTOS
+            proyectos: [
+                {
+                    idKey: "grip",
+                    nombre: "GRIP",
+                    descripcion: "Proyecto de una garra clasificadora de discos de colores en recipientes. Integra una computadora que coordina la experiencia y dispositivos celulares que participan en la interacción."
+                },
+                {
+                    idKey: "burbujas",
+                    nombre: "BURBUJAS",
+                    descripcion: "Aplicación para visualizar el funcionamiento del algoritmo de ordenamiento Bubble Sort. Permite observar las comparaciones y los intercambios de posiciones hasta conseguir ordenar los elementos."
+                },
+                {
+                    idKey: "ahorcado",
+                    nombre: "AHORCADO",
+                    descripcion: "Implementación digital del clásico juego de palabras. El participante debe descubrir una palabra oculta proponiendo letras antes de agotar los intentos."
+                },
+                {
+                    idKey: "transfer",
+                    nombre: "EASY TRANSFER",
+                    descripcion: "Aplicación para intercambiar información entre un celular y una computadora conectados a una misma red local. Permite compartir archivos, textos y enlaces de manera sencilla."
+                }
+            ],
+
+            // 5. DATOS DE LA RED LOCAL
+            redLocal: {
+                titulo: "Una red para conectar nuestras ideas",
+                descripcion: "Construimos una red local inalámbrica dedicada para permitir la comunicación fluida y en tiempo real entre la computadora servidor y los dispositivos celulares de los participantes durante las demostraciones."
+            }
+        };
+
+        // =====================================================================
+        // LÓGICA DE INICIALIZACIÓN Y RENDERIZADO
+        // =====================================================================
+
+        document.addEventListener("DOMContentLoaded", () => {
+            cargarDatosInstitucionales();
+            cargarListaAlumnos();
+            cargarProyectos();
+            cargarSeccionRedLocal();
+        });
+
+        // Carga los encabezados y datos de profesores
+        function cargarDatosInstitucionales() {
+            document.getElementById("inst-nombre").textContent = CONFIGURACION.institucion;
+            document.getElementById("inst-evento").textContent = CONFIGURACION.evento;
+            document.getElementById("inst-curso").textContent = CONFIGURACION.curso;
+            document.getElementById("inst-profesores").textContent = CONFIGURACION.profesores.join(" y ");
+        }
+
+        // Divide y presenta la lista de alumnos en Grupo 1 y Grupo 2
+        function cargarListaAlumnos() {
+            const ulG1 = document.getElementById("lista-grupo-1");
+            const ulG2 = document.getElementById("lista-grupo-2");
+
+            CONFIGURACION.alumnos.forEach(alumno => {
+                const li = document.createElement("li");
+                li.textContent = alumno.nombre;
+                if (alumno.grupo === 1) {
+                    ulG1.appendChild(li);
+                } else {
+                    ulG2.appendChild(li);
+                }
+            });
+        }
+
+        // Genera las tarjetas de los 4 proyectos principales
+        function cargarProyectos() {
+            const contenedor = document.getElementById("contenedor-proyectos");
+
+            CONFIGURACION.proyectos.forEach(p => {
+                const card = document.createElement("article");
+                card.className = "project-card";
+
+                const videoId = CONFIGURACION.youtubeIDs[p.idKey];
+
+                card.innerHTML = `
+                    <h3 class="project-title">${p.nombre}</h3>
+                    <p class="project-description">${p.descripcion}</p>
+                    <div class="video-container" id="video-container-${p.idKey}"></div>
+                `;
+
+                contenedor.appendChild(card);
+                crearReproductorDiferido(`video-container-${p.idKey}`, videoId, p.nombre);
+            });
+        }
+
+        // Carga la sección descriptiva del quinto video (Red Local)
+        function cargarSeccionRedLocal() {
+            document.getElementById("red-titulo").textContent = CONFIGURACION.redLocal.titulo;
+            document.getElementById("red-descripcion").textContent = CONFIGURACION.redLocal.descripcion;
+            crearReproductorDiferido("video-red-local", CONFIGURACION.youtubeIDs.redLocal, CONFIGURACION.redLocal.titulo);
+        }
+
+        // =====================================================================
+        // SISTEMA DE CARGA DIFERIDA DE VIDEOS YOUTUBE (LAZY-LOADING)
+        // Evita cargar iframes pesados al inicio; inserta el iframe solo tras el clic.
+        // =====================================================================
+
+        function crearReproductorDiferido(containerId, videoId, tituloProyecto) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Si el ID no ha sido configurado aún, muestra un aviso discreto
+            if (!videoId || videoId.includes("PEGAR_ID")) {
+                container.innerHTML = `<div class="video-unconfigured">Video de «${tituloProyecto}» no configurado aún.</div>`;
+                return;
+            }
+
+            // Crear el elemento thumbnail reservado
+            const placeholder = document.createElement("div");
+            placeholder.className = "video-placeholder";
+            // Usa la imagen de vista previa oficial de YouTube
+            placeholder.style.backgroundImage = `url('https://img.youtube.com/vi/${videoId}/hqdefault.jpg')`;
+
+            const playBtn = document.createElement("div");
+            playBtn.className = "play-button";
+            placeholder.appendChild(playBtn);
+
+            // Al hacer clic, se reemplaza la imagen por el iframe interactivo
+            placeholder.addEventListener("click", () => {
+                const iframe = document.createElement("iframe");
+                iframe.setAttribute("src", `https://www.youtube.com/embed/${videoId}?autoplay=1`);
+                iframe.setAttribute("title", `Video sobre ${tituloProyecto}`);
+                iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+                iframe.setAttribute("allowfullscreen", "true");
+                iframe.setAttribute("loading", "lazy");
+
+                container.innerHTML = "";
+                container.appendChild(iframe);
+            });
+
+            container.appendChild(placeholder);
+        }
+    </script>
+</body>
+</html>
